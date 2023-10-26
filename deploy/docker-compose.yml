@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  app_lottery:
+    container_name: app_lottery
+    build:
+      context: .
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ../project:/var/www
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    expose:
+      - "9000"
+
+  web_lottery:
+    image: nginx:alpine
+    container_name: web_lottery
+    restart: on-failure
+    volumes:
+      - ./logs:/var/log/nginx
+      - ../project:/var/www
+      - ./config/nginx:/etc/nginx.conf.d
+    ports:
+      - "8000:80"
+
+  db_lottery:
+    image: postgres:15.4
+    container_name: db_lottery
+    restart: unless-stopped
+    env_file:
+      - ../project/.env
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_DB=${DB_DATABASE}
+    ports:
+      - "5432:5432"
+
