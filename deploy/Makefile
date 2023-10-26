@@ -25,5 +25,10 @@ else
 	docker-compose exec app_lottery composer install --no-dev
 endif
 	docker-compose exec app_lottery php artisan migrate
+
 down:
 	docker-compose down
+
+seed:
+	docker-compose exec app_lottery php artisan db:seed
+

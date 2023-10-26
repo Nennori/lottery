@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = User::class;
 
     /**
@@ -19,11 +14,13 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
+            'password' => $this->faker->password,
         ];
     }
 }
