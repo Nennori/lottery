@@ -30,17 +30,3 @@ RUN apt-get update \
         pdo_pgsql \
         pgsql \
 
-#RUN #curl -s https://getcomposer.org/installer | php
-#RUN #alias composer='php composer.phar'
-# Add user for laravel application
-#RUN groupadd -g 1000 lottery
-#RUN useradd -u 1000 -ms /bin/bash -g lottery lottery
-
-# Copy existing application directory contents
-#COPY ../project /var/www
-
-# Copy existing application directory permissions
-#COPY --chown=lottery:lottery . /var/www
-
-# Change current user to www
-#USER lottery
