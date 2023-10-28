@@ -20,7 +20,7 @@ services:
     volumes:
       - ./logs:/var/log/nginx
       - ../project:/var/www
-      - ./config/nginx:/etc/nginx.conf.d
+      - ./config/nginx:/etc/nginx/conf.d
     ports:
       - "8000:80"
 
@@ -34,6 +34,11 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
+volumes:
+  dbdata:
+    driver: local

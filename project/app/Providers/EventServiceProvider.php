@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\MatchFinishedEvent;
+use App\Events\MatchUserValidatedEvent;
+use App\Events\WinnerChosenEvent;
+use App\Listeners\AddMatchUserListener;
+use App\Listeners\ChooseWinnerListener;
+use App\Listeners\RewardWinnerListener;
 use Laravel\Lumen\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -12,9 +18,17 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \App\Events\ExampleEvent::class => [
-            \App\Listeners\ExampleListener::class,
+        MatchFinishedEvent::class => [
+            ChooseWinnerListener::class,
         ],
+
+        WinnerChosenEvent::class => [
+            RewardWinnerListener::class,
+        ],
+
+        MatchUserValidatedEvent::class => [
+            AddMatchUserListener::class,
+        ]
     ];
 
     /**

@@ -1,5 +1,7 @@
 /project/vendor
 /.idea
+/deploy/.env
+/deploy/logs
 /project/Homestead.json
 /project/Homestead.yaml
 /project/.env
