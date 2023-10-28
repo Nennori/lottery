@@ -7,6 +7,7 @@ use App\Events\MatchUserValidatedEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class LotteryGameMatch extends Model
 {
@@ -68,14 +69,17 @@ class LotteryGameMatch extends Model
         return $match;
     }
 
+    /**
+     */
     public static function addUser($data)
     {
         $match = LotteryGameMatch::find($data['match_id']);
         $userId = $data['user_id'];
 
-        if ($match->userNotAddedToMatch($userId) && $match->userGameLimitNotReached()) {
-            event(new MatchUserValidatedEvent($match, $userId));
-        }
+        if ($match->userGameLimitReached()) throw new HttpException(400, 'Max user limit reached');
+        if ($match->userAddedToMatch($userId)) throw new HttpException(400, 'User already added');
+
+        event(new MatchUserValidatedEvent($match, $userId));
 
         return $match;
     }
@@ -85,13 +89,13 @@ class LotteryGameMatch extends Model
         return self::where('game_id', $gameId)->get();
     }
 
-    private function userNotAddedToMatch($userId): bool
+    private function userAddedToMatch($userId): bool
     {
-        return $this->users()->where('user_id', $userId)->first() == null;
+        return $this->users()->where('user_id', $userId)->first() !== null;
     }
 
-    private function userGameLimitNotReached(): bool
+    private function userGameLimitReached(): bool
     {
-        return $this->users()->count() < $this->game()->value('gamer_count');
+        return $this->users()->count() >= $this->game()->value('gamer_count');
     }
 }
