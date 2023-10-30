@@ -15,7 +15,7 @@ else
 	docker-compose exec app_lottery composer install --no-dev
 endif
 	docker-compose exec app_lottery php artisan migrate
-	sudo chmod -R o+w ../project/storage
+	docker-compose exec app_lottery chmod -R o+w ./storage
 
 up:
 	cp ../project/.env .env
